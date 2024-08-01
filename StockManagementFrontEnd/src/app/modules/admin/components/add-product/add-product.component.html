@@ -1,0 +1,112 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">ADD PRODUCT</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <!-- <li class="breadcrumb-item active">Dashboard v1</li> -->
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<form [formGroup]="form" (ngSubmit)="formSubmit()">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header bg-dark">
+          <p class="text-white p-2" style="font-size: 18px;">Add new product to product list</p>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-evenly align-items-center" style="width: 100%; gap: 20px;">
+            <div class="mb-2" style="flex: 1;">
+              <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>Product Category</mat-label>
+                <input formControlName="productCategory" matInput placeholder="Product Category">
+                <mat-icon matSuffix>badge</mat-icon>
+                <mat-hint>Enter product category</mat-hint>
+              </mat-form-field>
+            </div>
+            <div class="mb-2" style="flex: 1;">
+              <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>Product Name</mat-label>
+                <input formControlName="productName" matInput placeholder="Product Name">
+                <mat-icon matSuffix>shopping_basket</mat-icon>
+                <mat-hint>Enter product name</mat-hint>
+              </mat-form-field>
+            </div>
+            <div class="mb-2" style="flex: 1;">
+              <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>Last Product ID</mat-label>
+                <input disabled matInput [value]="products.productId" placeholder="Product ID">
+                <mat-icon matSuffix>lock</mat-icon>
+                <mat-hint>Last product entry</mat-hint>
+              </mat-form-field>
+            </div>
+
+          </div>
+          <div class="d-flex justify-content-evenly align-items-center" style="width: 100%; gap: 20px;">
+
+            <div class="mb-2" style="flex: 1;">
+              <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>Product HSNNO</mat-label>
+                <input formControlName="productHSNNo" matInput placeholder="Product HSNNO">
+                <mat-icon matSuffix>numbers</mat-icon>
+                <mat-hint>Enter product hsnno</mat-hint>
+              </mat-form-field>
+            </div>
+            <div class=" mb-2" style="flex: 1;">
+              <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>Product Cost</mat-label>
+                <input formControlName="productCost" matInput placeholder="Product Cost">
+                <mat-icon matSuffix>currency_rupee</mat-icon>
+                <mat-hint>Enter product cost</mat-hint>
+              </mat-form-field>
+            </div>
+
+          </div>
+          <div class="d-flex justify-content-evenly align-items-center" style="width: 100%; gap: 20px;">
+
+            <div class="mb-2" style="flex: 1;">
+              <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>Product Description</mat-label>
+                <!-- <input matInput placeholder="Product Description"> -->
+                <textarea formControlName="productDescription" matInput>Product Description</textarea>
+
+                <mat-hint>Enter product description</mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+          <!-- <div class="d-flex justify-content-evenly align-items-center" style="width: 100%; gap: 20px;">
+
+            <div class="mb-2" style="flex: 1;">
+              <mat-form-field appearance="outline" style="width: 100%;">
+                <mat-label>Product Image</mat-label>
+                <input formControlName="file" type="file" #fileInput style="display: none;" (change)="onFileSelected($event)">
+                <div style="display: flex; align-items: center;">
+                  <input (click)="fileInput.click()" matInput placeholder="No file selected" [value]="selectedFileName"
+                    readonly>
+                  <mat-icon matSuffix>image</mat-icon>
+                </div>
+                <mat-hint>Click the icon to select an image</mat-hint>
+              </mat-form-field>
+            </div>
+          </div> -->
+
+          <div class="row">
+            <div class="col">
+              <button [disabled]="form.invalid" class="p-4"
+              style="width: 100%;" mat-stroked-button type="submit" >ADD PRODUCT</button>
+            </div>
+            <div class="col">
+              <a (click)="resetForm()" class="p-4" style="width: 100%;" mat-stroked-button color="warn">RESET</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

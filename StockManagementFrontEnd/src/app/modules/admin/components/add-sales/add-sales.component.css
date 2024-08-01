@@ -1,0 +1,3 @@
+.readonly-select .mat-select-trigger {
+    pointer-events: none;
+}

@@ -1,0 +1,237 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">ADD SALES</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+<form [formGroup]="form" (ngSubmit)="submitForm()">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <div class="card-header">
+          <p>Add sale to sales list</p>
+        </div>
+        <div class="card-body">
+          <div class="card p-2">
+            <div class="card-header bg-dark">
+              <p>PRODUCT INFO</p>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col mb-2">
+                  <input type="hidden" #productId id="productId" [value]="loadedSignleProduct.productId" />
+                  <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-label>Purchase ID</mat-label>
+                    <input disabled matInput placeholder="Purchase ID"[value]="purchase.purchaseId" />
+                    <mat-icon matSuffix>badge</mat-icon>
+                    <mat-hint>Last purchase id</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="col mb-2">
+                  <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-label>Stock Qty</mat-label>
+                    <input disabled matInput placeholder="Stock Quantity" [value]="stock.remainingQuantity" />
+                    <mat-icon matSuffix>badge</mat-icon>
+                    <mat-hint>Available Stock Quantity</mat-hint>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-label>Select Product Category</mat-label>
+                    <mat-select (selectionChange)="loadProductByCategory()"
+                     formControlName="productCategory" disableRipple
+                      placeholder="Select product category">
+                      <mat-option *ngFor="let prod of products" value="{{prod}}">{{prod}}</mat-option>
+                    </mat-select>
+                    <mat-hint>Select your product category first</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="col">
+                  <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-label>Select Product</mat-label>
+                    <mat-select (selectionChange)="loadProductById()" placeholder="Select product"
+                      formControlName="productName">
+                      <mat-option [value]="pro.productId"
+                        *ngFor="let pro of loadedProducts">{{pro.productName}}</mat-option>
+                    </mat-select>
+                    <mat-hint>Select your product name</mat-hint>
+                  </mat-form-field>
+                </div>
+              </div>
+
+
+              <div class="d-flex justify-content-evenly align-items-center" style="width: 100%; gap: 20px">
+                <div class="mb-2" style="flex: 1">
+                  <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-label>Unit Price</mat-label>
+                    <input disabled #productUnitPriceInput id="productUnitPrice" matInput
+                     placeholder="Unit Price"  />
+                    <mat-icon matSuffix>currency_rupee</mat-icon>
+                    <mat-hint>Product unit price</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="mb-2" style="flex: 1">
+                  <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-label>Purchase Quantity</mat-label>
+                    <input #productQuantity (change)="calculateTotalPrice()" matInput placeholder="Purchase Quantity" formControlName="quantity" />
+                    <mat-icon matSuffix>numbers</mat-icon>
+                    <mat-hint>Enter purchase quantity</mat-hint>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="d-flex justify-content-evenly align-items-center" style="width: 100%; gap: 20px">
+                <div class="mb-2" style="flex: 1">
+                  <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-label>Purchase Date</mat-label>
+                    <input #productDate id="productDate" matInput [matDatepicker]="picker"
+                    placeholder="Purchase Date"
+                    formControlName="date" readonly/>
+                    <mat-icon matSuffix>event</mat-icon>
+                    <!-- <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle> -->
+                    <mat-datepicker #picker></mat-datepicker>
+                    <mat-hint>Enter purchase date</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="mb-2" style="flex: 1">
+                  <mat-form-field appearance="outline" style="width: 100%">
+                    <mat-label>Total Purchase Price</mat-label>
+                    <input #totalPurchaseAmmount matInput placeholder="Total Purchase Price" formControlName="price" readonly />
+                    <mat-icon matSuffix>currency_rupee</mat-icon>
+                    <mat-hint>Enter purchase price</mat-hint>
+                  </mat-form-field>
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col">
+                  <button class="p-4 bg-dark" style="width: 100%" mat-flat-button type="button" (click)="addSales()">
+                    ADD
+                  </button>
+                </div>
+                <div class="col">
+                  <a class="p-4" style="width: 100%" mat-stroked-button color="warn" type="button"
+                    (click)="resetForm()">RESET</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card mb-3">
+            <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+              <ng-container matColumnDef="position">
+                <th mat-header-cell *matHeaderCellDef>No.</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.position }}
+                </td>
+                <td mat-footer-cell *matFooterCellDef>Total</td>
+              </ng-container>
+              <ng-container matColumnDef="productId">
+                <th mat-header-cell *matHeaderCellDef>Product ID</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.productId }}
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+              </ng-container>
+              <ng-container matColumnDef="productCost">
+                <th mat-header-cell *matHeaderCellDef>Unit Price</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.productCost }}
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+              </ng-container>
+              <ng-container matColumnDef="quantity">
+                <th mat-header-cell *matHeaderCellDef>Quantity</th>
+                <td mat-cell *matCellDef="let element">
+                  {{ element.quantity }}
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+              </ng-container>
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef>Date</th>
+                <td mat-cell *matCellDef="let element">{{ element.date }}</td>
+                <td mat-footer-cell *matFooterCellDef></td>
+              </ng-container>
+              <ng-container matColumnDef="price">
+                <th mat-header-cell *matHeaderCellDef>Net Price</th>
+                <td mat-cell *matCellDef="let element">{{ element.price }}</td>
+                <td mat-footer-cell *matFooterCellDef>
+                  {{ getTotalSaleCost() | currency : "INR" : "symbol" }}
+                </td>
+              </ng-container>
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+              <tr class="bg-secondary" mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+            </table>
+          </div>
+
+
+
+          <div class="card p-2">
+            <div class="card-header bg-dark">
+              <p>CUSTOMER INFO</p>
+            </div>
+            <div class="card-body">
+              <div class="d-flex justify-content-evenly align-items-center" style="width: 100%; gap: 20px;">
+                <div class="mb-2" style="flex: 1;">
+                  <mat-form-field appearance="outline" style="width: 100%;">
+                    <mat-label>Customer Name</mat-label>
+                    <input matInput placeholder="Customer name" formControlName="customer">
+                    <mat-icon matSuffix>profile</mat-icon>
+                    <mat-hint>Enter customer name</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="mb-2" style="flex: 1;">
+                  <mat-form-field appearance="outline" style="width: 100%;">
+                    <mat-label>Customer Contact</mat-label>
+                    <input matInput placeholder="Customer contact" formControlName="contact">
+                    <mat-icon matSuffix>profile</mat-icon>
+                    <mat-hint>Enter customer contact</mat-hint>
+                  </mat-form-field>
+                </div>
+              </div>
+              <div class="d-flex justify-content-evenly align-items-center" style="width: 100%; gap: 20px;">
+                <div class="mb-2" style="flex: 1;">
+                  <mat-form-field appearance="outline" style="width: 100%;">
+                    <mat-label>Customer Email</mat-label>
+                    <input matInput placeholder="Customer Email" formControlName="email">
+                    <mat-icon matSuffix>mail</mat-icon>
+                    <mat-hint>Customer email</mat-hint>
+                  </mat-form-field>
+                </div>
+                <div class="mb-2" style="flex: 1;">
+                  <mat-form-field appearance="outline" style="width: 100%;">
+                    <mat-label>Customer Address</mat-label>
+                    <input matInput placeholder="Customer Address" formControlName="address">
+                    <mat-icon matSuffix>location_on</mat-icon>
+                    <mat-hint>Customer location</mat-hint>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <button class="p-4 bg-dark" style="width: 100%;" mat-flat-button type="submit">SALE
+                PRODUCT</button>
+            </div>
+            <div class="col">
+              <button class="p-4" style="width: 100%;" mat-stroked-button color="warn" type="button"
+                (click)="resetForm()">RESET</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

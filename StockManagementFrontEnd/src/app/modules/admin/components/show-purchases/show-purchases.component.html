@@ -1,0 +1,137 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">PURCHASE LIST</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <mat-form-field appearance="outline" class="example-full-width">
+      <mat-label>Search</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Search product by details" #input>
+    </mat-form-field>
+  </div>
+  <div class="col">
+    <div class="row">
+      <div class="col">
+        <button class="btn btn-dark p-3 example-full-width" (click)="downloadPDF()">Download PDF</button>
+      </div>
+      <div class="col">
+        <button class="btn btn-dark p-3 example-full-width" (click)="downloadCSV()">Download CSV</button>
+      </div>
+      <div class="col">
+        <button class="btn btn-dark p-3 example-full-width" (click)="printTable()">Print</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <ng-container  ntainer matColumnDef="purchaseProductId">
+    <th mat-header-cell *matHeaderCellDef>No.</th>
+    <td class="bg-secondary text-center" mat-cell *matCellDef="let element">
+      {{element.purchaseProductId}}
+    </td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+  <ng-container matColumnDef="productName">
+    <th mat-header-cell *matHeaderCellDef>Product Name</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.productName }}
+      <div class="example-element-detail m-0"
+           [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+        <span>Supplier Name: {{element.supplier.supplierName}} <span class="m-0">| </span>
+          <span class="text-info">
+            <a type="button"
+            data-toggle="modal"
+            [attr.data-target]="'#exampleModal2-' + element.supplier.supplierId">More info..</a>
+          </span>
+        </span>
+        <span>
+          <!-- Modal -->
+          <div class="modal fade" [id]="'exampleModal2-' + element.supplier.supplierId" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h2 class="modal-title" id="exampleModalLabel">Supplier Information</h2>
+                  </div>
+                  <div class="modal-body">
+                  <p class="text-dark">Supplier information from your sales inventory records.</p>
+                  <table class="table table-hover table-bordered">
+                    <thead>
+                      <tr>
+                        <th scope="col">Name</th>
+                        <td>{{element.supplier.supplierName}}</td>
+                      </tr>
+                      <tr>
+                        <th scope="col">Contact</th>
+                        <td>{{element.supplier.supplierContact}}</td>
+                      </tr>
+                      <tr>
+                        <th scope="col">Email</th>
+                        <td>{{element.supplier.supplierEmail}}</td>
+                      </tr>
+                      <tr>
+                        <th scope="col">Address</th>
+                        <td>{{element.supplier.supplierAddress}}</td>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </span>
+      </div>
+    </td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+  <ng-container matColumnDef="productPrice">
+    <th mat-header-cell *matHeaderCellDef>Product Price</th>
+    <td mat-cell *matCellDef="let element">{{ element.productPrice }}</td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+  <ng-container matColumnDef="purchaseDate">
+    <th mat-header-cell *matHeaderCellDef>Purchase Date</th>
+    <td mat-cell *matCellDef="let element">{{ element.purchaseDate }}</td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+  <ng-container matColumnDef="purchaseQty">
+    <th mat-header-cell *matHeaderCellDef>Total Purchase Qty</th>
+    <td mat-cell *matCellDef="let element">
+      {{ element.totalPurchaseQuantity }}
+    </td>
+    <td mat-footer-cell *matFooterCellDef>
+      Net Purchase Amount -
+    </td>
+  </ng-container>
+  <ng-container matColumnDef="purchaseAmount">
+    <th mat-header-cell *matHeaderCellDef>Total Purchase Amount</th>
+    <td  class="bg-secondary" mat-cell *matCellDef="let element">
+      {{ element.totalPurchaseAmount }}
+    </td>
+    <td  class="bg-warning" mat-footer-cell *matFooterCellDef>
+      {{ calculatePurchaseNetAmount() | currency : "INR" : "symbol" }}
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns" class="bg-secondary"></tr>
+  <tr mat-row *matRowDef="let element; columns: displayedColumns"
+  class="example-element-row table-bordered"
+  [class.example-expanded-row]="expandedElement === element"
+  (click)="expandedElement = expandedElement === element ? null : element"></tr>
+  <tr class="bg-secondary" mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+</table>
+<mat-paginator [length]="resultsLength" [pageSize]="30" aria-label="Select page of purchase"></mat-paginator>

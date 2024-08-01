@@ -1,0 +1,88 @@
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0">PRODUCT LIST</h1>
+      </div>
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <!-- <li class="breadcrumb-item active">Dashboard v1</li> -->
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col">
+    <mat-form-field appearance="outline" class="example-full-width">
+      <mat-label>Search</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Search product by details" #input>
+    </mat-form-field>
+  </div>
+  <div class="col">
+    <div class="row">
+      <div class="col">
+        <button class="btn btn-dark p-3 example-full-width" (click)="downloadPDF()">Download PDF</button>
+      </div>
+      <div class="col">
+        <button class="btn btn-dark p-3 example-full-width" (click)="downloadCSV()">Download CSV</button>
+      </div>
+      <div class="col">
+        <button class="btn btn-dark p-3 example-full-width" (click)="printTable()">Print</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <ng-container matColumnDef="productId">
+    <th mat-header-cell *matHeaderCellDef> No. </th>
+    <td mat-cell *matCellDef="let element" class="bg-secondary"> {{element.productId}} </td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+  <ng-container matColumnDef="productName">
+    <th mat-header-cell *matHeaderCellDef> Name </th>
+    <td mat-cell *matCellDef="let element"> {{element.productName}} </td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+  <ng-container matColumnDef="productHSNNo">
+    <th mat-header-cell *matHeaderCellDef> Product HSN </th>
+    <td mat-cell *matCellDef="let element"> {{element.productHSNNo}} </td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+  <ng-container matColumnDef="productDescription">
+    <th mat-header-cell *matHeaderCellDef> Description </th>
+    <td mat-cell *matCellDef="let element"> {{element.productDescription}} </td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+  <ng-container matColumnDef="productCategory">
+    <th mat-header-cell *matHeaderCellDef> Category </th>
+    <td mat-cell *matCellDef="let element"> {{element.productCategory}} </td>
+    <td mat-footer-cell *matFooterCellDef></td>
+  </ng-container>
+
+  <ng-container matColumnDef="productDate">
+    <th mat-header-cell *matHeaderCellDef> Date </th>
+    <td mat-cell *matCellDef="let element"> {{element.productDate}} </td>
+    <td mat-footer-cell *matFooterCellDef>
+      Total Product Amount -
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="productCost">
+    <th mat-header-cell *matHeaderCellDef> Price </th>
+    <td mat-cell *matCellDef="let element"> {{element.productCost}} </td>
+    <td mat-footer-cell *matFooterCellDef class="bg-warning">
+      {{ calculateProductNetAmount() | currency : "INR" : "symbol" }}
+    </td>
+  </ng-container>
+
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns" class="bg-secondary"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+  class="example-element-row table-bordered" ></tr>
+  <tr class="bg-secondary" mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+</table>
